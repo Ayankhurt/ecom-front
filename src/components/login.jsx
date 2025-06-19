@@ -28,9 +28,7 @@ const Login = () => {
     try {
       const response = await api.post('/login', formData)
       if (response.status === 200) {
-        if (response.data.token) {
-          localStorage.setItem('token', response.data.token)
-        }
+        localStorage.setItem('token', response.data.token)
         login(response.data.user)
         navigate('/')
       }

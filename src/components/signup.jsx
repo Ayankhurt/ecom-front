@@ -31,9 +31,17 @@ const Signup = () => {
     try {
       const response = await api.post('/sign-up', formData)
       if (response.status === 201) {
-        // Store user data in context
-        login(response.data.data)
-        navigate('/')
+        // If signup is successful, try to login automatically
+        const loginResponse = await api.post('/login', {
+          email: formData.email,
+          password: formData.password
+        })
+        
+        if (loginResponse.status === 200) {
+          localStorage.setItem('token', loginResponse.data.token)
+          login(loginResponse.data.user)
+          navigate('/')
+        }
       }
     } catch (error) {
       console.error('Signup error:', error.response?.data || error.message)
