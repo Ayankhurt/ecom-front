@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import api from '../api/axios'
 import './auth.css'
 
 const Signup = () => {
@@ -29,7 +29,7 @@ const Signup = () => {
     setError('')
     
     try {
-      const response = await axios.post('https://ecom-back-cyan.vercel.app/sign-up', formData)
+      const response = await api.post('/sign-up', formData)
       if (response.status === 201) {
         // Store user data in context
         login(response.data.data)

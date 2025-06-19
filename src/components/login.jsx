@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import api from '../api/axios'
 import './auth.css'
 
 const Login = () => {
@@ -26,12 +26,16 @@ const Login = () => {
     setLoading(true)
     setError('')
     try {
-      const response = await axios.post('https://ecom-back-cyan.vercel.app/login', formData, { withCredentials: true })
+      const response = await api.post('/login', formData)
       if (response.status === 200) {
+        if (response.data.token) {
+          localStorage.setItem('token', response.data.token)
+        }
         login(response.data.user)
         navigate('/')
       }
     } catch (error) {
+      console.error('Login error:', error.response?.data || error.message)
       setError(error.response?.data?.message || 'An error occurred during login')
     } finally {
       setLoading(false)
